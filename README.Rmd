@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # augassign
 
 <!-- badges: start -->
+[![R build status](https://github.com/EmilHvitfeldt/augassign/workflows/R-CMD-check/badge.svg)](https://github.com/EmilHvitfeldt/augassign/actions)
 <!-- badges: end -->
 
 The goal of augassign is to provide [**aug**mented **assign**ment](https://en.m.wikipedia.org/wiki/Augmented_assignment) simular to what is seen in languages such as [Python](https://docs.python.org/2.0/ref/augassign.html).
