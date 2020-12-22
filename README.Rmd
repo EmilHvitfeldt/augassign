@@ -1,0 +1,130 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# augassign
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of augassign is to provide [**aug**mented **assign**ment](https://en.m.wikipedia.org/wiki/Augmented_assignment) simular to what is seen in languages such as [Python](https://docs.python.org/2.0/ref/augassign.html).
+
+## Installation
+
+You can install the package with:
+
+```{r, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("EmilHvitfeldt/augassign")
+```
+
+This package will most likely never be put on CRAN.
+
+## Example
+
+The infix operators in this packages allows you to rewrite expressions such as `x <- x + 1` into `x %+=% 1`. The package contains the most common arithmatic operators.
+
+```{r}
+library(augassign)
+
+x <- 1
+
+x %+=% 2
+
+x
+
+x %-=% 1
+
+x
+
+x %*=% 100
+
+x
+
+x %/=% 20
+
+x
+```
+
+Also works in loops
+
+```{r}
+y <- 0
+for (i in 1:100) {
+  y %+=% i
+}
+
+y
+```
+
+is scoped correctly to work inside functions
+
+```{r}
+x <- 1
+
+f <- function(x) {
+  x %+=% 10
+  x
+}
+
+f(10)
+
+x
+```
+
+Where augmented assignment shines is when you have long variable names or if you need to modify something deeply in a list.
+
+```{r}
+list_with_really_long_name <- list(h = list(x = 1),
+                                   x = 1)
+
+list_with_really_long_name
+
+list_with_really_long_name$x %+=% 1
+
+list_with_really_long_name$h$x %+=% 100
+
+list_with_really_long_name
+```
+
+Since the package is rewriting the expressions under the hood, you are able to work with vectors just as easy as single numbers
+
+```{r}
+x <- 1:10
+
+x %+=% x
+
+x
+```
+
+# Downsides
+
+The mayor downside is that these operators are vastly slower then the traditional counterparts
+
+```{r}
+x <- 0
+bench::mark(check = FALSE,
+  {x <- x + 1},
+  {x %+=% 1}
+)
+```
+
+Due the orders of operations, it is not possible to chain together multiple operators.
+
+```{r, error=TRUE}
+a <- b <- c <- 1
+
+a %+=% b %+=% c
+```
+
